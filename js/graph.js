@@ -4,8 +4,15 @@ class Graph {
 		if(this.canvas.getContext) {
 			this.aspectRatioX = 4;
 			this.aspectRatioY = 3;
+			this.idealYAxis = 35;
 			this.context = this.canvas.getContext("2d");
 			this.parentContainer = this.canvas.parentElement;
+			let styles = window.getComputedStyle(this.parentContainer);
+			styles = styles.getPropertyValue("max-width");
+			if(styles !== "none") {
+				this.idealWidth = styles.replace("px","");
+				this.idealWdith = Number(this.idealWidth);
+			}
 			this.resizeCanvas();
 			this.render();
 		} else {
@@ -18,8 +25,8 @@ class Graph {
 		window.addEventListener("resize", (event) => {
 			let aspectRatioHorizontal = 0;
 			aspectRatioHorizontal = this.canvas.width = this.parentContainer.offsetWidth;
-			aspectRatioHorizontal = aspectRatioHorizontal / 4;
-			this.canvas.height = aspectRatioHorizontal * 3;
+			aspectRatioHorizontal = aspectRatioHorizontal / this.aspectRatioX;
+			this.canvas.height = aspectRatioHorizontal * this.aspectRatioY;
 			this.render();
 		})
 	}
@@ -32,14 +39,14 @@ class Graph {
 	}
 
 	DrawAxis() {
-		let idealYAxis = 35;
-		this.context.lineWidth = 6;
+		let realYAxisPosition = (this.idealYAxis * this.canvas.width) / this.idealWidth;
+		this.context.lineWidth = (4 * this.canvas.width) / this.idealWidth;
 		this.context.beginPath();
-		this.context.moveTo(35, 0);
-		this.context.lineTo(35, this.canvas.height);
+		this.context.moveTo(realYAxisPosition, 0);
+		this.context.lineTo(realYAxisPosition, this.canvas.height);
 		this.context.stroke();
-		this.context.moveTo(0, this.canvas.height - 35);
-		this.context.lineTo(this.canvas.width,this.canvas.height - 35);
+		this.context.moveTo(0, this.canvas.height - realYAxisPosition);
+		this.context.lineTo(this.canvas.width,this.canvas.height - realYAxisPosition);
 		this.context.stroke();
 	}
 }
