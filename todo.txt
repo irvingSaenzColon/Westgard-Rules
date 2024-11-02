@@ -1,0 +1,7 @@
+Things i should accomplish
+
+- Draw a grid
+✔  Create a canvas that fills the whole window
+✔  Make it responsive
+- Draw X and Y Axis
+- Draw data from an array and graph it like a line chart
